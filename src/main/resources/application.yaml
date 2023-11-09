@@ -2,24 +2,9 @@
 spring:
   profiles:
     active: mysql
-  batch:
-    jdbc:
-      initialize-schema: embedded
 
----
 
-spring:
-  profiles:
-    active: local
-  datasource:
-    hikari:
-      jdbc-url: jdbc:h2:mem:db;MODE=MYSQL;
-      username: sa
-      password:
-      driver-class-name: org.h2.Driver
-  batch:
-    job:
-      enabled: true
+
 
 ---
 
@@ -27,14 +12,13 @@ spring:
   profiles:
     active: mysql
   datasource:
-    hikari:
-      jdbc-url: jdbc:mysql://localhost:3306/spring_batch?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-      username: root
-      password: root_pw1234!#
-      driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/spring_batch?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root_pw1234!#
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -42,7 +26,12 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
   batch:
-    job:
-      enabled: true
+    jdbc:
+      initialize-schema: always
+    job.enabled: true
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
+
