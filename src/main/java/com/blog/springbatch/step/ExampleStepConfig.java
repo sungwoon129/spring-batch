@@ -1,7 +1,7 @@
 package com.blog.springbatch.step;
 
-import com.blog.springbatch.ExampleJobConfig;
-import com.blog.springbatch.ExampleJobParameter;
+import com.blog.springbatch.job.ExampleJobConfig;
+import com.blog.springbatch.parameter.ExampleJobParameter;
 import com.blog.springbatch.User;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;

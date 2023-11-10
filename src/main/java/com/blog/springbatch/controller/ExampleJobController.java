@@ -1,5 +1,6 @@
-package com.blog.springbatch;
+package com.blog.springbatch.controller;
 
+import com.blog.springbatch.service.ExampleJobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -9,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.blog.springbatch.ExampleJobConfig.JOB_NAME;
-import static com.blog.springbatch.ExampleJobConfig.JOB_NAME_JDBC;
+import static com.blog.springbatch.job.ExampleJobConfig.JOB_NAME;
+import static com.blog.springbatch.job.ExampleJobConfig.JOB_NAME_JDBC;
 
 @RequiredArgsConstructor
 @RestController

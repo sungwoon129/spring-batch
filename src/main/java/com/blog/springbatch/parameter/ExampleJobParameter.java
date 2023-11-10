@@ -1,4 +1,4 @@
-package com.blog.springbatch;
+package com.blog.springbatch.parameter;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

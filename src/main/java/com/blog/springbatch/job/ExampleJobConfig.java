@@ -1,4 +1,4 @@
-package com.blog.springbatch;
+package com.blog.springbatch.job;
 
 import com.blog.springbatch.step.ExampleJDBCStepConfig;
 import com.blog.springbatch.step.ExampleStepConfig;

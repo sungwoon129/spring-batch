@@ -1,8 +1,6 @@
 package com.blog.springbatch.step;
 
-import com.blog.springbatch.ExampleJobConfig;
-import com.blog.springbatch.ExampleJobParameter;
-import com.blog.springbatch.User;
+import com.blog.springbatch.job.ExampleJobConfig;
 import com.blog.springbatch.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Step;
