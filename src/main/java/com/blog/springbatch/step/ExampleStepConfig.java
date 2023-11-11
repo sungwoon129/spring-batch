@@ -1,6 +1,8 @@
 package com.blog.springbatch.step;
 
+import com.blog.springbatch.UserDto;
 import com.blog.springbatch.job.ExampleJobConfig;
+import com.blog.springbatch.listener.CustomStepListener.CustomStepListener;
 import com.blog.springbatch.parameter.ExampleJobParameter;
 import com.blog.springbatch.User;
 import jakarta.persistence.EntityManagerFactory;
@@ -12,6 +14,7 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
@@ -27,15 +30,18 @@ public class ExampleStepConfig {
 
     private final EntityManagerFactory entityManagerFactory;
     private final ExampleJobParameter jobParameter;
+    private final CustomStepListener customStepListener;
+    private final CustomItemWriter customItemWriter;
 
     @Bean(STEP_NAME)
     @JobScope
     public Step exampleStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new StepBuilder(STEP_NAME, jobRepository)
-                .<User, User>chunk(jobParameter.getChunkSize(), transactionManager)
+                .<User, UserDto>chunk(jobParameter.getChunkSize(), transactionManager)
                 .reader(exampleItemReader())
                 .processor(jpaItemProcessor())
-                .writer(customItemWriter())
+                .writer(customItemWriter)
+                .listener(customStepListener)
                 .build();
     }
 
@@ -52,17 +58,9 @@ public class ExampleStepConfig {
     }
 
     @Bean
-    public ItemProcessor<User,User> jpaItemProcessor() {
+    public ItemProcessor<User,UserDto> jpaItemProcessor() {
 
-        return user -> user;
+        return user -> new UserDto(user.getId(), user.getEmail(), user.getNickname(), user.getPassword(), user.getRegDate());
     }
 
-    @Bean
-    public ItemWriter<User> customItemWriter() {
-        return users -> {
-            for (User user : users) {
-                System.out.println(user.getId());
-            }
-        };
-    }
 }
