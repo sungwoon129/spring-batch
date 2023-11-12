@@ -22,9 +22,7 @@ public class CustomStepListener implements StepExecutionListener {
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
         // Step 실행 후에 처리
-        ExecutionContext jobContext = stepExecution.getJobExecution().getExecutionContext();
 
-        jobContext.put("processedData", customItemWriter.getProcessedData());
         return null;
     }
 }

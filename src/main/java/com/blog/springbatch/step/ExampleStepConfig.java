@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.listener.ExecutionContextPromotionListener;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
@@ -30,7 +31,6 @@ public class ExampleStepConfig {
 
     private final EntityManagerFactory entityManagerFactory;
     private final ExampleJobParameter jobParameter;
-    private final CustomStepListener customStepListener;
     private final CustomItemWriter customItemWriter;
 
     @Bean(STEP_NAME)
@@ -41,7 +41,7 @@ public class ExampleStepConfig {
                 .reader(exampleItemReader())
                 .processor(jpaItemProcessor())
                 .writer(customItemWriter)
-                .listener(customStepListener)
+                .listener(promotionListener())
                 .build();
     }
 
@@ -61,6 +61,13 @@ public class ExampleStepConfig {
     public ItemProcessor<User,UserDto> jpaItemProcessor() {
 
         return user -> new UserDto(user.getId(), user.getEmail(), user.getNickname(), user.getPassword(), user.getRegDate());
+    }
+
+    @Bean
+    public ExecutionContextPromotionListener promotionListener() {
+        ExecutionContextPromotionListener listener = new ExecutionContextPromotionListener();
+        listener.setKeys(new String[]{"processData"}); // 자동으로 승격시킬 키 목록
+        return listener;
     }
 
 }
