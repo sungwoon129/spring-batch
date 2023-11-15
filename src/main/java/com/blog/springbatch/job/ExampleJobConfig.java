@@ -1,7 +1,7 @@
 package com.blog.springbatch.job;
 
-import com.blog.springbatch.step.ExampleJDBCStepConfig;
 import com.blog.springbatch.step.ExampleStepConfig;
+import com.blog.springbatch.step.LoggingStep;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -20,14 +20,13 @@ public class ExampleJobConfig {
     public static final String JOB_NAME = "EXAMPLE_JOB";
     public static final String JOB_NAME_JDBC = "EXAMPLE_JOB_JDBC";
     private final Step exampleStep;
-    private final Step exampleJDBCStep;
+    private final Step loggingStep;
 
 
     public ExampleJobConfig(
-            @Qualifier(ExampleStepConfig.STEP_NAME) Step exampleStep, @Qualifier(ExampleJDBCStepConfig.STEP_NAME)Step exampleJDBCStepConfig) {
+            @Qualifier(ExampleStepConfig.STEP_NAME) Step exampleStep, @Qualifier(LoggingStep.STEP_NAME)Step loggingStep) {
         this.exampleStep = exampleStep;
-        this.exampleJDBCStep = exampleJDBCStepConfig;
-
+        this.loggingStep = loggingStep;
     }
 
     @Bean(JOB_NAME)
@@ -35,16 +34,11 @@ public class ExampleJobConfig {
         return new JobBuilder(JOB_NAME, jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(exampleStep)
+                .next(loggingStep)
                 .build();
     }
 
-    @Bean(JOB_NAME_JDBC)
-    public Job exampleJob_Jdbc(JobRepository jobRepository) {
-        return new JobBuilder(JOB_NAME, jobRepository)
-                .incrementer(new RunIdIncrementer())
-                .start(exampleJDBCStep)
-                .build();
-    }
+
 
 
 
